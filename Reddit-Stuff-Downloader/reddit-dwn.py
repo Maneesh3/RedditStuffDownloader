@@ -398,7 +398,7 @@ def getSubredditPosts(subredditName,limitPosts,filter_type):
 			re_url_au = re_url[:re_url.rfind('/')] + '/audio'
 			exten = download(post_ID, url, re_url_au, file_name_a, title, exten)
 			if(exten != 'NO_AUDIO'):
-				os.system('../ffmpeg -i '+ file_name_v+' -i '+file_name_a+' -c:v copy -c:a aac -strict experimental '+file_name)
+				os.system('ffmpeg -i '+ file_name_v+' -i '+file_name_a+' -c:v copy -c:a aac -strict experimental '+file_name)
 				os.remove(file_name_v)
 				os.remove(file_name_a)
 			else:
