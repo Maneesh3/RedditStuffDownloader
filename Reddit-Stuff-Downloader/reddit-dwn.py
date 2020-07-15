@@ -439,7 +439,9 @@ _comments = False	# True to download comments
 
 limitPostCount = 50
 listSubreddits = 	[			# fill this list with subreddit names
-
+			'Python',
+			'learnpython',
+			'ProgrammerHumor'
 
 				]
 
