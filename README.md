@@ -26,6 +26,7 @@ Each subreddit content is saaved in a seperate directory along with posts likst 
 ```
 ## TODO:
 - [x] Download Reddit videos along with audio
+- [ ] Verify Windows OS support !??
 - [ ] Cannot downlaod some URL's content
 - [ ] Unknown URL must be properly notified (logs)
 - [ ] Reconstruct the source code using classes and with proper documentation
