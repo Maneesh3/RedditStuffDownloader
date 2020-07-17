@@ -10,6 +10,7 @@ import urllib.request
 import dpath.util		# comments download - dictionary search,edit
 
 import progressbar
+import re
 
 pbar = None
 def show_progress(block_num, block_size, total_size):
@@ -68,7 +69,23 @@ def checkDownloadFormat(url):
 
 	if('youtu.be' in url or 'youtube.com' in url):
 		return 'youtube',url
-
+	
+	if('reddit.com' in url and 'gallery' in url):
+		print('reddit gallery')
+		rcon = requests.get(url,headers = headers)
+		re_url = []
+		soup = BeautifulSoup(rcon.content,"html.parser")
+		try:
+			for ii in  soup.find_all('img'):
+				srcUrl = ii.get('src')
+				if('preview.redd.it' in srcUrl):
+					re_url.append(srcUrl.replace('&amp;','&'))
+			ext = re.findall("\.\w+\?",re_url[0])[0][:-1]
+			return ext, re_url
+		except Exception as e:
+			print(e)
+			return '.txt',url
+		
 	if(url.find('v.redd.it') != -1):
 		print('v.reddit.it .mp4 video and audio')
 		bitrates = ["DASH_1080","DASH_720","DASH_600","DASH_480","DASH_360","DASH_240","DASH_96","DASH_1_2_M","DASH_2_4_M","DASH_600_K",
@@ -100,7 +117,7 @@ def checkDownloadFormat(url):
 	if(url.find('redgifs.com') != -1):
 		print('redgifs .mp4')
 		try:
-			rcon = requests.get(url)
+			rcon = requests.get(url,headers = headers)
 		except:
 			print('connection reset ?!?!')
 			return '.txt',url
@@ -110,14 +127,14 @@ def checkDownloadFormat(url):
 
 	if(url.find('streamable.com') != -1):
 		print('streamable .mp4')
-		rcon = requests.get(url)
+		rcon = requests.get(url,headers = headers)
 		soup = BeautifulSoup(rcon.content,"html.parser")
 		url_mod = 'http://' + str([link.get('src') for link in soup.find_all('video')][0])[2:]
 		return '.mp4',url_mod
 
 	if(url.find('gfycat.com') != -1):
 		
-		rcon = requests.get(url)			
+		rcon = requests.get(url,,headers = headers)			
 		lengthEstimated = len(url.split('/')[-1]) + 30 + 15		# estimation
 		srcon = str(rcon.content)
 		posEnd_ = srcon.find('.mp4" type="video/mp4"')
@@ -155,7 +172,7 @@ def checkDownloadFormat(url):
 
 	if(url.find('imgur.com') != -1):
 		print('imgur .jpg')
-		rcon = requests.get(url)			
+		rcon = requests.get(url,headers = headers)			
 		lengthEstimated = 35
 		srcon = str(rcon.content)
 		posEnd_ = srcon.find('.jpg')
@@ -184,63 +201,75 @@ def checkDownloadFormat(url):
 	#print(url.split("/"))		# debug purpose
 
 
+def downloadCoreFunc(re_url, file_name, exten):
+	if(exten == '.txt'):
+		raise ValueError('cannot DOWNLOAD -rising manual error !')
+	if(exten == 'POST' or exten == 'youtube'):
+		return exten
+	#if(sss.find(post_ID) == -1):
+	t=3
+	flag = 1
+	while(t):
+		try:
+			print("...")
+			r = requests.get(re_url,timeout=65,headers=headers)
+			flag = 0
+			break
+		except:
+			t=t-1
+			continue
+	if(flag == 0):		
+		print("saving!")
+		try:
+			if('<?xml' in str(r.content)):
+				return 'NO_AUDIO'
+			with open(file_name,"wb") as f:
+				f.write(r.content)
+		except:
+			print("ERROR WHILE SAVING!!")
+			raise ValueError('cannot DOWNLOAD -rising manual error !')
+	else:
+		try:
+			print("TRYING Again and Saving!?")
+			t=5
+			flag = 1
+			while(t):
+				try:
+					print("...>")
+					# request = requests.get(re_url, timeout=10, stream=True)
+					# with open(file_name, 'wb') as fh:
+					# 	for chunk in request.iter_content(100): 	# 1024 * 1024
+					# 		fh.write(chunk)
+					opener = urllib.request.build_opener()
+					urllib.request.install_opener(opener)
+					opener.addheaders = headers_other
+					urllib.request.install_opener(opener)
+					urllib.request.urlretrieve(re_url,file_name,show_progress)
+	
+					flag = 0
+					break
+				except:
+					t=t-1
+					continue
+			if(flag == 1):
+				raise ValueError('cannot DOWNLOAD -rising manual error !')
+		except:
+			raise ValueError('cannot DOWNLOAD -rising manual error !')
+	return exten
+
 def download(post_ID, url, re_url, file_name, title, exten):
 	try:
 		
-		if(exten == '.txt'):
-				raise ValueError('cannot DOWNLOAD -rising manual error !')
-		if(exten == 'POST' or exten == 'youtube'):
-			return exten
-		#if(sss.find(post_ID) == -1):
-		t=3
-		flag = 1
-		while(t):
-			try:
-				print("...")
-				r = requests.get(re_url,timeout=65,headers=headers)
-				flag = 0
-				break
-			except:
-				t=t-1
-				continue
-		if(flag == 0):		
-			print("saving!")
-			try:
-				if('<?xml' in str(r.content)):
-					return 'NO_AUDIO'
-				with open(file_name,"wb") as f:
-					f.write(r.content)
-			except:
-				print("ERROR WHILE SAVING!!")
-				raise ValueError('cannot DOWNLOAD -rising manual error !')
+		if(type(re_url) == list):
+			loopCnt = 1
+			for linkUrl in re_url:
+				#print(linkUrl)
+				exten = downloadCoreFunc(linkUrl, post_ID+'_'+str(loopCnt)+exten, exten)
+				loopCnt += 1
 		else:
-			try:
-				print("TRYING Again and Saving!?")
-				t=5
-				flag = 1
-				while(t):
-					try:
-						print("...>")
-						# request = requests.get(re_url, timeout=10, stream=True)
-						# with open(file_name, 'wb') as fh:
-						# 	for chunk in request.iter_content(100): 	# 1024 * 1024
-						# 		fh.write(chunk)
-						opener = urllib.request.build_opener()
-						urllib.request.install_opener(opener)
-						opener.addheaders = headers_other
-						urllib.request.install_opener(opener)
-						urllib.request.urlretrieve(re_url,file_name,show_progress)
-	  
-						flag = 0
-						break
-					except:
-						t=t-1
-						continue
-				if(flag == 1):
-					raise ValueError('cannot DOWNLOAD -rising manual error !')
-			except:
-				raise ValueError('cannot DOWNLOAD -rising manual error !')
-	except:
+			exten = downloadCoreFunc(re_url, file_name, exten)
+	except Exception as e:
+		#print(e)		# for debugging
 		print("cannot able to download")
 		newD = '{"title" : "'+ str(title) +'", "url" :"' + str(url) + '", "re_url" :"' + str(re_url) + '"}'
 		txt_file = open(post_ID+'.txt','a')
@@ -445,7 +474,12 @@ listSubreddits = 	[			# fill this list with subreddit names
 
 				]
 
-for subreddit_N in listSubreddits:
-	getSubredditPosts(subreddit_N,limitPostCount,'hot')
+def main():
+	for subreddit_N in listSubreddits:
+		getSubredditPosts(subreddit_N,limitPostCount,'hot')
+		
+main()
+
+
 
 
