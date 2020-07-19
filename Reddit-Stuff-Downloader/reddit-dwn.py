@@ -12,6 +12,8 @@ import dpath.util		# comments download - dictionary search,edit
 import datetime
 import progressbar
 import re
+import argparse
+import sys
 
 pbar = None
 def show_progress(block_num, block_size, total_size):
@@ -485,10 +487,40 @@ listSubreddits = 	[			# fill this list with subreddit names
 
 				]
 
-def main():
+def main_preDetermined():
 	for subreddit_N in listSubreddits:
 		getSubredditPosts(subreddit_N,limitPostCount,'hot')
+	
+def main():
+	parser = argparse.ArgumentParser(description = "\033[92m[#] Reddit Stuff Downloader [#]\033[0m")
+	parser.add_argument("-l", "--subredditList", help="predefined subreddits list", action="store_true")
+	parser.add_argument("-i", "--postID", help="single Post ID; -i <PostID>", action="store_true")
+	parser.add_argument('_postIdUrl', nargs='?', help="value of PostID/postUrl", type=str)
+	parser.add_argument("-u", "--postUrl", help="single Post URL; -u <PostUrl>", action="store_true")
+	#parser.add_argument('_postUrl', nargs='*', help="value of PostUrl", type=str)
+	# nargs = '*' for all arguments as list
+	# nargs='?' for optional argument
+	args = parser.parse_args()
+
+	if len(sys.argv) == 1:
+		parser.print_help()
 		
+	if(args.subredditList):
+		print("\n\033[92m[+] Predefined list of Subreddits\033[0m\n")
+		main_preDetermined()
+	elif(args.postID):
+		if(args._postIdUrl == None):
+			print("\n\n\033[91m[-] Plz enter the PostID, see help:\n\033[0m")
+			parser.print_help()
+		else:
+			print(args._postIdUrl)
+	elif(args.postUrl):
+		if(args._postIdUrl == None):
+			print("\n\n\033[91m[-] Plz enter the PostUrl, see help:\n\033[0m")
+			parser.print_help()
+		else:
+			print(args._postIdUrl)
+ 
 main()
 
 
