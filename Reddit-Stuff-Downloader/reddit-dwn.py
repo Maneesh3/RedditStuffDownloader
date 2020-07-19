@@ -9,6 +9,7 @@ import time
 import urllib.request
 import dpath.util		# comments download - dictionary search,edit
 
+import datetime
 import progressbar
 import re
 
@@ -304,9 +305,19 @@ def getCommentsDownload(post,post_ID):
 			_commentBody = str(comment.body)
 		except:
 			_commentBody = '[DELETED]'
-		
+		if(not comment.score_hidden):
+			_upVotes = str(comment.ups)
+		else:
+			_upVotes = '[SCORE_HIDDEN]'
+		try:
+			_commentCreated = str(datetime.datetime.fromtimestamp(comment.created).strftime('%Y-%m-%d %H:%M:%S'))
+		except:
+			_commentCreated = '[TIME_ERROR]'
+			
 		comm_data = {
 			"_author": _author,
+			"_c-upVotes": _upVotes,		# name _c-upVotes is ONLY used so that the order will be good
+			"_c-time": _commentCreated,	# same reason as above comment
 			"_comment": _commentBody,
 			"_reply": {}
 		}
