@@ -1,5 +1,5 @@
 # RedditStuffDownloader
->Download any subreddit posts/media/content
+>Download any subreddit posts/media/content - along with comments
 
 ## Requirements
 * `Python 3.8`
