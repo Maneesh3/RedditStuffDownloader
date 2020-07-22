@@ -148,9 +148,12 @@ def checkDownloadFormat(url):
   
 		if(url_mod == ""):
 			print('gfycat - redgifs redirect .mp4')
-			soup = BeautifulSoup(rcon.content,"html.parser")
-			url_mod = str([link.get('src') for link in soup.find_all('source')][1])
-			return str(url_mod[url_mod.rfind('.'):]),url_mod
+			try:
+				soup = BeautifulSoup(rcon.content,"html.parser")
+				url_mod = str([link.get('src') for link in soup.find_all('source')][1])
+				return str(url_mod[url_mod.rfind('.'):]),url_mod
+			except:
+   				return '.txt',url
    
 		print('gfycat .mp4')
 		return '.mp4',url_mod
