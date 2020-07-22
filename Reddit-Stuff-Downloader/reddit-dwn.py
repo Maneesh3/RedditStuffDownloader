@@ -490,36 +490,42 @@ listSubreddits = 	[			# fill this list with subreddit names
 def main_preDetermined():
 	for subreddit_N in listSubreddits:
 		getSubredditPosts(subreddit_N,limitPostCount,'hot')
-	
+
+banner = '''
+\033[92m
+ _____          _     _ _ _      _____ _          __  __ 
+|  __ \        | |   | (_) |    / ____| |        / _|/ _|
+| |__) |___  __| | __| |_| |_  | (___ | |_ _   _| |_| |_ 
+|  _  // _ \/ _` |/ _` | | __|  \___ \| __| | | |  _|  _|
+| | \ \  __/ (_| | (_| | | |_   ____) | |_| |_| | | | |  
+|_|  \_\___|\__,_|\__,_|_|\__| |_____/ \__|\__,_|_| |_|  
+ _____                      _                 _           
+|  __ \                    | |               | |          
+| |  | | _____      ___ __ | | ___   __ _  __| | ___ _ __ 
+| |  | |/ _ \ \ /\ / / '_ \| |/ _ \ / _` |/ _` |/ _ \ '__|
+| |__| | (_) \ V  V /| | | | | (_) | (_| | (_| |  __/ |   
+|_____/ \___/ \_/\_/ |_| |_|_|\___/ \__,_|\__,_|\___|_|   
+\033[0m 
+'''
+
 def main():
+	print(banner)
 	parser = argparse.ArgumentParser(description = "\033[92m[#] Reddit Stuff Downloader [#]\033[0m")
 	parser.add_argument("-l", "--subredditList", help="predefined subreddits list", action="store_true")
-	parser.add_argument("-i", "--postID", help="single Post ID; -i <PostID>", action="store_true")
-	parser.add_argument('_postIdUrl', nargs='?', help="value of PostID/postUrl", type=str)
-	parser.add_argument("-u", "--postUrl", help="single Post URL; -u <PostUrl>", action="store_true")
-	#parser.add_argument('_postUrl', nargs='*', help="value of PostUrl", type=str)
-	# nargs = '*' for all arguments as list
-	# nargs='?' for optional argument
+	parser.add_argument("-i", "--pid", help="single Post ID; -i <PostID>", dest='pid')
+	parser.add_argument("-u", "--purl", help="single Post URL; -u <PostUrl>", dest='purl')
 	args = parser.parse_args()
 
 	if len(sys.argv) == 1:
 		parser.print_help()
 		
 	if(args.subredditList):
-		print("\n\033[92m[+] Predefined list of Subreddits\033[0m\n")
+		print("\n\033[93m[+] Predefined list of Subreddits\033[0m\n")
 		main_preDetermined()
-	elif(args.postID):
-		if(args._postIdUrl == None):
-			print("\n\n\033[91m[-] Plz enter the PostID, see help:\n\033[0m")
-			parser.print_help()
-		else:
-			print(args._postIdUrl)
-	elif(args.postUrl):
-		if(args._postIdUrl == None):
-			print("\n\n\033[91m[-] Plz enter the PostUrl, see help:\n\033[0m")
-			parser.print_help()
-		else:
-			print(args._postIdUrl)
+	elif(args.pid):					# add functionality for these 2 options
+		print(args.pid)
+	elif(args.purl):
+		print(args.purl)
  
 main()
 
