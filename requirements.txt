@@ -1,5 +1,4 @@
-praw==7.0.0
+praw
 requests
-json
 bs4
 dpath
