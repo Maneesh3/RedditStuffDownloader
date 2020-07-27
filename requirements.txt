@@ -2,3 +2,4 @@ praw
 requests
 bs4
 dpath
+progressbar
