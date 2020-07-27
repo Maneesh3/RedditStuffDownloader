@@ -137,7 +137,7 @@ def checkDownloadFormat(url):
 
 	if(url.find('gfycat.com') != -1):
 		
-		rcon = requests.get(url,,headers = headers)			
+		rcon = requests.get(url,headers = headers)			
 		lengthEstimated = len(url.split('/')[-1]) + 30 + 15		# estimation
 		srcon = str(rcon.content)
 		posEnd_ = srcon.find('.mp4" type="video/mp4"')
