@@ -481,18 +481,22 @@ parentFolder = 'Reddit-Stuff-Downloader'
 
 _comments = False	# True to download comments
 
-
-limitPostCount = 50
-listSubreddits = 	[			# fill this list with subreddit names
+_filterType = 'hot'
+_limitPostCount = 50
+_listSubreddits = 	[			# fill this list with subreddit names
 			'Python',
 			'learnpython',
 			'ProgrammerHumor'
 
 				]
 
-def main_preDetermined():
+def main_preDetermined(listSubreddits,limitPostCount,filterType):
+	if(listSubreddits==None): listSubreddits=_listSubreddits	
+	if(limitPostCount==None): limitPostCount=_limitPostCount
+	if(filterType==None): filterType=_filterType
+	limitPostCount = int(limitPostCount)	# str to int conv
 	for subreddit_N in listSubreddits:
-		getSubredditPosts(subreddit_N,limitPostCount,'hot')
+		getSubredditPosts(subreddit_N,limitPostCount,filterType)
 
 banner = '''
 \033[92m
@@ -515,16 +519,27 @@ def main():
 	print(banner)
 	parser = argparse.ArgumentParser(description = "\033[92m[#] Reddit Stuff Downloader [#]\033[0m")
 	parser.add_argument("-l", "--subredditList", help="predefined subreddits list", action="store_true")
+	parser.add_argument("-f", "--file", help="text file; -f <File path>", dest='fpath')
+	parser.add_argument("-c", "--count", help="posts count; -c <number>", dest='cnt')
+	parser.add_argument("-t", "--type", help="filter type(hot,top,new); -t <type>", dest='typ')	# display all types of sorting filters
 	parser.add_argument("-i", "--pid", help="single Post ID; -i <PostID>", dest='pid')
 	parser.add_argument("-u", "--purl", help="single Post URL; -u <PostUrl>", dest='purl')
 	args = parser.parse_args()
 
 	if len(sys.argv) == 1:
 		parser.print_help()
-		
-	if(args.subredditList):
+					# add check for count and filter value provided
+	if(args.fpath):
+		print("\n\033[93m[+] Custom subreddits list given\033[0m\n ")
+		ll = []
+		with open(args.fpath,'r') as f:
+			ll=f.readlines()
+		fl = [l.replace('\n','') for l in ll]	# remove '\n' at end of each line
+		main_preDetermined(fl,args.cnt,args.typ)
+	elif(args.subredditList):
 		print("\n\033[93m[+] Predefined list of Subreddits\033[0m\n")
-		main_preDetermined()
+		main_preDetermined(None,args.cnt,args.typ)	
+  
 	elif(args.pid):					# add functionality for these 2 options
 		print(args.pid)
 	elif(args.purl):
