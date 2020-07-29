@@ -5,7 +5,7 @@
 * `Python 3.8`
 * `Reddit account` - _with Script app activated (for API requests)_
   * fill the `config.json` file with the required configuration
-* `FFMPEG` download from website, keep in parent directory _(only used for reddit video & audio combination)_
+* `FFmpeg` download from website- [FFmpeg](https://ffmpeg.org/), keep in parent directory _(only used for reddit video & audio combination)_
 
 ## Installation
 
@@ -34,15 +34,18 @@ $ python Reddit-Stuff-Downloader/reddit-dwn.py
 | |__| | (_) \ V  V /| | | | | (_) | (_| | (_| |  __/ |   
 |_____/ \___/ \_/\_/ |_| |_|_|\___/ \__,_|\__,_|\___|_|   
  
-usage: reddit1.py [-h] [-l] [-i PID] [-u PURL]
+usage: reddit1.py [-h] [-l] [-f FPATH] [-c CNT] [-t TYP] [-i PID] [-u PURL]
 
 [#] Reddit Stuff Downloader [#]
 
 optional arguments:
-  -h, --help            show this help message and exit
-  -l, --subredditList   predefined subreddits list
-  -i PID, --pid PID     single Post ID; -i <PostID>
-  -u PURL, --purl PURL  single Post URL; -u <PostUrl>
+  -h, --help              show this help message and exit
+  -l, --subredditList     predefined subreddits list
+  -f FPATH, --file FPATH  text file; -f <File path>
+  -c CNT, --count CNT     posts count; -c <number>
+  -t TYP, --type TYP      filter type(hot,top,new); -t <type>
+  -i PID, --pid PID       single Post ID; -i <PostID>
+  -u PURL, --purl PURL    single Post URL; -u <PostUrl>
  
  
 Each subreddit content is saved in a seperate directory 
@@ -51,9 +54,9 @@ along with posts links saved in json file
 ## TODO:
 - [x] Download Reddit videos along with audio
 - [ ] Command line arguments   **_[currently working on]_**
-- [ ] Verify Windows OS support !??   **_[currently working on] Bugs listed in issues page_**
+- [x] Verify Windows OS support !??   **_[currently working on] Bugs listed in issues page_**
 - [ ] Cannot downlaod some URL's content, Unknown URL must be properly notified (logs)
-- [ ] add inputs like list of subs in txt, subreddit name input, etc..
+- [ ] add inputs like list of subs in txt, subreddit name input, etc.. **_[currently working on] Bugs listed in issues page_**
 - [ ] Reconstruct the source code using classes and with proper documentation
 
 
