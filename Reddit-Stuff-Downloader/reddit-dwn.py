@@ -440,7 +440,7 @@ def getSubredditPosts(subredditName,limitPosts,filter_type):
 			file_name_v = 'v_'+ file_name
 			exten = download(post_ID, url, re_url, file_name_v, title, exten)
 			file_name_a = 'a_'+ file_name
-			re_url_au = re_url[:re_url.rfind('/')] + '/audio'
+			re_url_au = re_url[:re_url.rfind('/')] + '/DASH_audio.mp4'	# updated from '/audio', might change in future?
 			exten = download(post_ID, url, re_url_au, file_name_a, title, exten)
 			if(exten != 'NO_AUDIO'):
 				os.system('ffmpeg -i '+ file_name_v+' -i '+file_name_a+' -c:v copy -c:a aac -strict experimental '+file_name)
