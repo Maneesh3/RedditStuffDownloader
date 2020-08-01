@@ -39,14 +39,14 @@ usage: reddit1.py [-h] [-l] [-f FPATH] [-c CNT] [-t TYP] [-i PID] [-u PURL]
 [#] Reddit Stuff Downloader [#]
 
 optional arguments:
-  -h, --help                   show this help message and exit
-  -l, --subredditList          predefined subreddits list
-  -s SUBNAME, --subreddit SUBNAME single subreddit; -s <sub name>
-  -f FPATH, --file FPATH       text file; -f <File path>
-  -c CNT, --count CNT          posts count; -c <number>
-  -t TYP, --type TYP           filter type(hot,top,new); -t <type>
-  -i PID, --pid PID            single Post ID; -i <PostID>
-  -u PURL, --purl PURL         single Post URL; -u <PostUrl>
+  -h, --help                 show this help message and exit
+  -l, --subredditList        predefined subreddits list
+  -s SUBNAME, --sub SUBNAME  single subreddit; -s <sub name>
+  -f FPATH, --file FPATH     text file; -f <File path>
+  -c CNT, --count CNT        posts count; -c <number>
+  -t TYP, --type TYP         filter type(hot,top,new); -t <type>
+  -i PID, --pid PID          single Post ID; -i <PostID>
+  -u PURL, --purl PURL       single Post URL; -u <PostUrl>
  
  
 Each subreddit content is saved in a seperate directory 
