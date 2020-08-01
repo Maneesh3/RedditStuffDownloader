@@ -524,6 +524,7 @@ def main():
 	print(banner)
 	parser = argparse.ArgumentParser(description = "\033[92m[#] Reddit Stuff Downloader [#]\033[0m")
 	parser.add_argument("-l", "--subredditList", help="predefined subreddits list", action="store_true")
+	parser.add_argument("-s", "--subreddit", help="single subreddit; -s <sub name>", dest='subname')
 	parser.add_argument("-f", "--file", help="text file; -f <File path>", dest='fpath')
 	parser.add_argument("-c", "--count", help="posts count; -c <number>", dest='cnt')
 	parser.add_argument("-t", "--type", help="filter type(hot,top,new); -t <type>", dest='typ')	# display all types of sorting filters
@@ -534,7 +535,12 @@ def main():
 	if len(sys.argv) == 1:
 		parser.print_help()
 					# add check for count and filter value provided
-	if(args.fpath):
+	if(args.subname):
+		print("\n\033[93m[+] Custom single subreddit given\033[0m\n ")
+		fl = []
+		fl.append(args.subname)
+		main_preDetermined(fl,args.cnt,args.typ)
+	elif(args.fpath):
 		print("\n\033[93m[+] Custom subreddits list given\033[0m\n ")
 		ll = []
 		with open(args.fpath,'r') as f:
