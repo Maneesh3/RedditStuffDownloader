@@ -524,7 +524,7 @@ def main():
 	print(banner)
 	parser = argparse.ArgumentParser(description = "\033[92m[#] Reddit Stuff Downloader [#]\033[0m")
 	parser.add_argument("-l", "--subredditList", help="predefined subreddits list", action="store_true")
-	parser.add_argument("-s", "--subreddit", help="single subreddit; -s <sub name>", dest='subname')
+	parser.add_argument("-s", "--sub", help="single subreddit; -s <sub name>", dest='subname')
 	parser.add_argument("-f", "--file", help="text file; -f <File path>", dest='fpath')
 	parser.add_argument("-c", "--count", help="posts count; -c <number>", dest='cnt')
 	parser.add_argument("-t", "--type", help="filter type(hot,top,new); -t <type>", dest='typ')	# display all types of sorting filters
