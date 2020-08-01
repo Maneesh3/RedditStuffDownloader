@@ -135,6 +135,11 @@ def checkDownloadFormat(url):
 		url_mod = 'http://' + str([link.get('src') for link in soup.find_all('video')][0])[2:]
 		return '.mp4',url_mod
 
+	if(url.find('thumbs.gfycat.com') != -1):
+		url_mod = url if(url[-1]!='/') else url[:-1]
+		exten_ = url_mod.split('.')[-1] if(url_mod.split('.')[-1] in ['gif','mp4','gifv','jpg','png','webm','webp']) else 'mp4'
+		return '.'+exten_,url_mod
+
 	if(url.find('gfycat.com') != -1):
 		
 		rcon = requests.get(url,headers = headers)			
