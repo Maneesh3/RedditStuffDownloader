@@ -289,6 +289,30 @@ def download(post_ID, url, re_url, file_name, title, exten):
 		exten = '.txt'
 	return exten
 
+def initialDownload(post_ID, url, re_url, file_name, title, exten):
+	if(url.find('v.redd.it') != -1 and exten != '.txt'):
+		file_name_v = 'v_'+ file_name
+		exten = download(post_ID, url, re_url, file_name_v, title, exten)
+		file_name_a = 'a_'+ file_name
+		re_url_au = re_url[:re_url.rfind('/')] + '/DASH_audio.mp4'
+		exten = download(post_ID, url, re_url_au, file_name_a, title, exten)
+		if(exten != 'NO_AUDIO'):
+			#os.system('../ffmpeg -i '+ file_name_v+' -i '+file_name_a+' -c:v copy -c:a aac -strict experimental '+file_name)
+			os.system('ffmpeg -i '+ file_name_v+' -i '+file_name_a+' -c:v copy -c:a aac -strict experimental '+file_name)
+			os.remove(file_name_v)
+			os.remove(file_name_a)
+		else:
+			os.rename(file_name_v,file_name)
+
+	elif(exten == 'youtube'):
+		print('Youtube Video txt file saved!')
+		txt_file = open(post_ID+'_ytb_.txt','a')
+		txt_file.write(title + '\n\n' + url)
+		txt_file.close()
+	elif(exten != 'POST' and exten != 'youtube'):
+		exten = download(post_ID, url, re_url, file_name, title, exten)
+	return exten
+
 
 def getCommentsDownload(post,post_ID):
 		
@@ -440,27 +464,7 @@ def getSubredditPosts(subredditName,limitPosts,filter_type):
 		
 		
 		#url = re_url
-		
-		if(url.find('v.redd.it') != -1 and exten != '.txt'):
-			file_name_v = 'v_'+ file_name
-			exten = download(post_ID, url, re_url, file_name_v, title, exten)
-			file_name_a = 'a_'+ file_name
-			re_url_au = re_url[:re_url.rfind('/')] + '/DASH_audio.mp4'	# updated from '/audio', might change in future?
-			exten = download(post_ID, url, re_url_au, file_name_a, title, exten)
-			if(exten != 'NO_AUDIO'):
-				os.system('ffmpeg -i '+ file_name_v+' -i '+file_name_a+' -c:v copy -c:a aac -strict experimental '+file_name)
-				os.remove(file_name_v)
-				os.remove(file_name_a)
-			else:
-				os.rename(file_name_v,file_name)
-
-		elif(exten == 'youtube'):
-			print('Youtube Video txt file saved!')
-			txt_file = open(post_ID+'_ytb_.txt','a')
-			txt_file.write(title + '\n\n' + url)
-			txt_file.close()
-		elif(exten != 'POST' and exten != 'youtube'):
-			exten = download(post_ID, url, re_url, file_name, title, exten)
+		exten = initialDownload(post_ID, url, re_url, file_name, title, exten)
 	
 	
 		if(exten != '.txt'):
@@ -502,6 +506,31 @@ def main_preDetermined(listSubreddits,limitPostCount,filterType):
 	limitPostCount = int(limitPostCount)	# str to int conv
 	for subreddit_N in listSubreddits:
 		getSubredditPosts(subreddit_N,limitPostCount,filterType)
+		
+def main_getPost(postID,postURL):
+	if(postID):
+		post = reddit.submission(id=postID)
+	elif(postURL):
+		post = reddit.submission(url=postURL)
+	post_ID = str(post)
+	url = (post.url)
+	title = (post.title)
+	print(url)
+	title = title.replace("\"","*")
+	title = title.replace("\'","_")
+	print(title)
+	if(post.selftext != ''):
+		print('POST saved!')
+		txt_file = open(post_ID+'_text_.txt','a')
+		txt_file.write(post.selftext)
+		txt_file.close()
+	exten,re_url = checkDownloadFormat(url)
+	file_name = post_ID + exten		
+	print(file_name)
+	exten = initialDownload(post_ID, url, re_url, file_name, title, exten)
+	if(exten == '.txt'):
+		print('check '+ str(post_ID)+'.txt file')
+		
 
 banner = '''
 \033[92m
@@ -551,10 +580,12 @@ def main():
 		print("\n\033[93m[+] Predefined list of Subreddits\033[0m\n")
 		main_preDetermined(None,args.cnt,args.typ)	
   
-	elif(args.pid):					# add functionality for these 2 options
-		print(args.pid)
+	elif(args.pid):
+		print("\n\033[93m[+] Downloading single Post - ID \033[0m\n ")
+		main_getPost(args.pid,None)
 	elif(args.purl):
-		print(args.purl)
+		print("\n\033[93m[+] Downloading single Post - URL \033[0m\n ")
+		main_getPost(None,args.purl)
  
 main()
 
