@@ -10,10 +10,11 @@ import urllib.request
 import dpath.util		# comments download - dictionary search,edit
 
 import datetime
-import progressbar
 import re
-import argparse
 import sys
+import progressbar
+import argparse
+
 
 pbar = None
 def show_progress(block_num, block_size, total_size):
