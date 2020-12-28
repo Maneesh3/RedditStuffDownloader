@@ -56,7 +56,7 @@ along with posts links saved in json file
 - [x] Download Reddit videos along with audio
 - [x] Command line arguments   **_[currently working on]_**
 - [x] Verify Windows OS support !??   **_[currently working on] Bugs listed in issues page_**
-- [ ] Cannot downlaod some URL's content, Unknown URL must be properly notified (logs)
+- [ ] Cannot download some URL's content, Unknown URL must be properly notified (logs)
 - [x] add inputs like list of subs in txt, subreddit name input, etc.. **_[currently working on] Bugs listed in issues page_**
 - [ ] Reconstruct the source code using classes and with proper documentation
 
