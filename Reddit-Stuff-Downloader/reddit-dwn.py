@@ -284,7 +284,7 @@ def download(post_ID, url, re_url, file_name, title, exten):
 		#print(e)		# for debugging
 		print("cannot able to download")
 		newD = '{"title" : "'+ str(title) +'", "url" :"' + str(url) + '", "re_url" :"' + str(re_url) + '"}'
-		txt_file = open(post_ID+'.txt','a')
+		txt_file = open(post_ID+'.txt','a', encoding="utf-8")
 		txt_file.write(newD)
 		txt_file.close()
 		exten = '.txt'
@@ -307,7 +307,7 @@ def initialDownload(post_ID, url, re_url, file_name, title, exten):
 
 	elif(exten == 'youtube'):
 		print('Youtube Video txt file saved!')
-		txt_file = open(post_ID+'_ytb_.txt','a')
+		txt_file = open(post_ID+'_ytb_.txt','a', encoding="utf-8")
 		txt_file.write(title + '\n\n' + url)
 		txt_file.close()
 	elif(exten != 'POST' and exten != 'youtube'):
@@ -374,7 +374,7 @@ def getCommentsDownload(post,post_ID):
 
 		count +=1
 	print("\nCount : ",count)
-	json_file = open(post_ID+'_comm_.json','w')
+	json_file = open(post_ID+'_comm_.json','w', encoding="utf-8")
 	json.dump(comm,json_file,indent = 4, sort_keys=True)
 
 
@@ -393,10 +393,10 @@ def getSubredditPosts(subredditName,limitPosts,filter_type):
 
 
 	try:
-		json_file = open(subredditName+'.json')
+		json_file = open(subredditName+'.json', encoding="utf-8")
 		json_file.close()
 	except:
-		json_fileI = open(subredditName+'.json','a')
+		json_fileI = open(subredditName+'.json','a', encoding="utf-8")
 		dataInit = '''{ "POST-ID": { 
 								"title" : "POST-TITLE",
 								"url" :"POST-URL"
@@ -409,7 +409,7 @@ def getSubredditPosts(subredditName,limitPosts,filter_type):
 	time_ = str(time.time()).split('.')[0]
 	copyfile(subredditName+'.json', subredditName+'_BACKUP_'+time_+'.json')
 
-	json_file = open(subredditName+'.json','r')
+	json_file = open(subredditName+'.json','r', encoding="utf-8")
 	data = json.load(json_file)
 	json_file.close()
 	#	=====================================================================================
@@ -423,7 +423,7 @@ def getSubredditPosts(subredditName,limitPosts,filter_type):
   
 		if(_comments):			# irrespective of available, downloading comments
 			try:
-				cf = open(post_ID+'_comm_.json','r')
+				cf = open(post_ID+'_comm_.json','r', encoding="utf-8")
 				cf.close()
 			except:
 				try:
@@ -455,7 +455,7 @@ def getSubredditPosts(subredditName,limitPosts,filter_type):
 
 		if(post.selftext != ''):
 			print('POST saved!')
-			txt_file = open(post_ID+'_text_.txt','a')
+			txt_file = open(post_ID+'_text_.txt','a', encoding="utf-8")
 			txt_file.write(post.selftext)
 			txt_file.close()
 		exten,re_url = checkDownloadFormat(url)
@@ -477,7 +477,7 @@ def getSubredditPosts(subredditName,limitPosts,filter_type):
 			#newDL = json.loads(newD)
 			data[post_ID] = newD#L
 			#print(data)
-			json_file = open(subredditName+'.json','w')
+			json_file = open(subredditName+'.json','w', encoding="utf-8")
 			json.dump(data,json_file,indent = 4, sort_keys=True)
 		print("============\n")
 	if(parentFolder in os.getcwd() and parentFolder != os.getcwd().split('/')[-1]):
@@ -522,7 +522,7 @@ def main_getPost(postID,postURL):
 	print(title)
 	if(post.selftext != ''):
 		print('POST saved!')
-		txt_file = open(post_ID+'_text_.txt','a')
+		txt_file = open(post_ID+'_text_.txt','a', encoding="utf-8")
 		txt_file.write(post.selftext)
 		txt_file.close()
 	exten,re_url = checkDownloadFormat(url)
