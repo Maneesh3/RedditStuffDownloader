@@ -125,9 +125,13 @@ def checkDownloadFormat(url):
 		except:
 			print('connection reset ?!?!')
 			return '.txt',url
-		soup = BeautifulSoup(rcon.content,"html.parser")
-		url_mod = str([link.get('src') for link in soup.find_all('source')][1])
-		return str(url_mod[url_mod.rfind('.'):]),url_mod
+		try:
+			soup = BeautifulSoup(rcon.content,"html.parser")
+			url_mod = str([link.get('src') for link in soup.find_all('source')][1])
+			return str(url_mod[url_mod.rfind('.'):]),url_mod
+		except Exception as e:
+			print(e)
+			return '.txt',url
 
 	if(url.find('streamable.com') != -1):
 		print('streamable .mp4')
