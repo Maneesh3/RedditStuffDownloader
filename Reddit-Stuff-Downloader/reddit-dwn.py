@@ -80,8 +80,8 @@ def checkDownloadFormat(url):
 		re_url = []
 		soup = BeautifulSoup(rcon.content,"html.parser")
 		try:
-			for ii in  soup.find_all('figure'):
-				srcUrl =  ii.contents[0]['href']
+			for ii in soup.find_all('figure'):
+				srcUrl = ii.find('a')['href']
 				if('preview.redd.it' in srcUrl):
 					re_url.append(srcUrl.replace('&amp;','&'))
 			ext = re.findall("\.\w+\?",re_url[0])[0][:-1]
