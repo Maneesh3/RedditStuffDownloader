@@ -119,15 +119,15 @@ def checkDownloadFormat(url):
 			return str(url[url.rfind('.'):]),url
 
 	if(url.find('redgifs.com') != -1):
-		print('redgifs .mp4')
+		print('redgifs .mp4 - load')
 		try:
-			rcon = requests.get(url,headers = headers)
+			rcon = requests.get(url, time.sleep(5), headers = headers)
 		except:
 			print('connection reset ?!?!')
 			return '.txt',url
 		try:
 			soup = BeautifulSoup(rcon.content,"html.parser")
-			url_mod = str([link.get('src') for link in soup.find_all('source')][1])
+			url_mod = soup.find(attrs={"property" : "og:video"})["content"]
 			return str(url_mod[url_mod.rfind('.'):]),url_mod
 		except Exception as e:
 			print(e)
