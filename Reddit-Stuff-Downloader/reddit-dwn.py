@@ -287,7 +287,7 @@ def download(post_ID, url, re_url, file_name, title, exten):
 	except Exception as e:
 		#print(e)		# for debugging
 		print("cannot able to download")
-		newD = '{"title" : "'+ str(title) +'", "url" :"' + str(url) + '", "re_url" :"' + str(re_url) + '"}'
+		newD = '{"title" : "'+ str(title.encode("utf-8")) +'", "url" :"' + str(url) + '", "re_url" :"' + str(re_url) + '"}'
 		txt_file = open(post_ID+'.txt','a', encoding="utf-8")
 		txt_file.write(newD)
 		txt_file.close()
