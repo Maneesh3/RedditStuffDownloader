@@ -83,9 +83,10 @@ def checkDownloadFormat(url):
 		try:
 			for ii in soup.find_all('figure'):
 				srcUrl = ii.find('a')['href']
-				if('preview.redd.it' in srcUrl):
-					re_url.append(srcUrl.replace('&amp;','&'))
-			ext = re.findall("\.\w+\?",re_url[0])[0][:-1]
+				if('preview.redd.it' in srcUrl or 'i.redd.it' in srcUrl):
+					pos = srcUrl.rfind('.')
+					re_url.append([srcUrl.replace('&amp;','&'), srcUrl[pos:pos+4]]) 	# assuming 3 letter extention
+			ext = srcUrl[pos:pos+4]
 			return ext, re_url
 		except Exception as e:
 			print(e)
@@ -284,7 +285,7 @@ def download(post_ID, url, re_url, file_name, title, exten):
 			loopCnt = 1
 			for linkUrl in re_url:
 				#print(linkUrl)
-				exten = downloadCoreFunc(linkUrl, post_ID+'_'+str(loopCnt)+exten, exten)
+				exten = downloadCoreFunc(linkUrl[0], post_ID+'_'+str(loopCnt)+linkUrl[1], linkUrl[1])
 				loopCnt += 1
 		else:
 			exten = downloadCoreFunc(re_url, file_name, exten)
