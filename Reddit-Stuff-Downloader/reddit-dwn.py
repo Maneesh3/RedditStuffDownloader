@@ -129,6 +129,7 @@ def checkDownloadFormat(url):
 			srcon = str(rcon.html.find("source")[1].raw_html)
 			upos = re.search("https:\/\/thumbs(\d)*\.redgifs.com\/([\w\-_\.\s\d])+",srcon)
 			url_mod = srcon[upos.start():upos.end()]
+			session.close()
 			return str(url_mod[url_mod.rfind('.'):]),url_mod
 		except Exception as e:
 			try:
@@ -136,9 +137,11 @@ def checkDownloadFormat(url):
 				srcon = str(rcon.html.find("img"))
 				upos = re.search("https:\/\/thumbs(\d)*\.gfycat.com\/([\w\-_\.\s\d])+",srcon)
 				url_mod = srcon[upos.start():upos.end()]
+				session.close()
 				return '_404'+str(url_mod[url_mod.rfind('.'):]),url_mod
 			except:
 				pass
+		session.close()
 		return '.txt', url_mod	
 
 	if(url.find('streamable.com') != -1):
@@ -186,6 +189,10 @@ def checkDownloadFormat(url):
 	if(url.find('imgur.com') != -1 and url.find('.jpg') != -1):
 		print('imgur .jpg dir')
 		return '.jpg',url
+	
+	if(url.find('imgur.com') != -1 and url.find('.jpeg') != -1):
+	print('imgur .jpeg dir')
+	return '.jpeg',url
 
 	if(url.find('imgur.com') != -1 and url.find('.png') != -1):
 		print('imgur .png dir')
