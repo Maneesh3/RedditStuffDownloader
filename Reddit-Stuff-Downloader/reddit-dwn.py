@@ -124,7 +124,15 @@ def checkDownloadFormat(url):
 		print('redgifs .mp4 - load')
 		session = HTMLSession()
 		rcon = session.get(url, headers = headers)
-		rcon.html.render(sleep=10)	# should inc if slow connection
+		CNT = 5
+		sleepT = 10
+		while(CNT):
+			print("..pageDwn..",6-CNT)
+			rcon.html.render(sleep=sleepT)
+			if(len(str(rcon.html.raw_html))>10000):		# success YES = 304959 ; success 404 = 56529 ; fail = 5843
+				break
+			CNT-=1
+			sleepT+=5
 		try:
 			srcon = str(rcon.html.find("source")[1].raw_html)
 			upos = re.search("https:\/\/thumbs(\d)*\.redgifs.com\/([\w\-_\.\s\d])+",srcon)
@@ -142,7 +150,7 @@ def checkDownloadFormat(url):
 			except:
 				pass
 		session.close()
-		return '.txt', url_mod	
+		return '.txt', url
 
 	if(url.find('streamable.com') != -1):
 		print('streamable .mp4')
