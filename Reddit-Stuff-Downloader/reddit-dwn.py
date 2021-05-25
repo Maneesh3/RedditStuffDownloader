@@ -17,6 +17,7 @@ import argparse
 from requests_html import HTMLSession
 
 pbar = None
+comm = 0
 def show_progress(block_num, block_size, total_size):
 	global pbar
 	if pbar is None:
@@ -323,8 +324,8 @@ def initialDownload(post_ID, url, re_url, file_name, title, exten):
 
 
 def getCommentsDownload(post,post_ID):
-		
-	post.comments.replace_more(limit=3)
+	global comm
+	post.comments.replace_more(limit=comm)
 	count = 0
 	comm = {}
 	parL = []
@@ -428,7 +429,7 @@ def getSubredditPosts(subredditName,limitPosts,filter_type):
 		print(str(post))		# put dir(post) for all attributes
 		post_ID = str(post)
   
-		if(_comments):			# irrespective of available, downloading comments
+		if(comm != 0):			# irrespective of available, downloading comments
 			try:
 				cf = open(post_ID+'_comm_.json','r')
 				cf.close()
@@ -516,6 +517,7 @@ def main_preDetermined(listSubreddits,limitPostCount,filterType):
 		getSubredditPosts(subreddit_N,limitPostCount,filterType)
 		
 def main_getPost(postID,postURL):
+	global comm
 	if(postID):
 		post = reddit.submission(id=postID)
 	elif(postURL):
@@ -538,6 +540,17 @@ def main_getPost(postID,postURL):
 	exten = initialDownload(post_ID, url, re_url, file_name, title, exten)
 	if(exten == '.txt'):
 		print('check '+ str(post_ID)+'.txt file')
+	if(comm != 0):			
+	try:
+		cf = open(post_ID+'_comm_.json','r')
+		cf.close()
+	except:
+		try:
+			getCommentsDownload(post,post_ID)
+			print('comments downloaded')
+		except Exception as e:
+			print(e)
+			print('error downloading comments!')
 		
 
 banner = '''
@@ -559,6 +572,7 @@ banner = '''
 
 def main():
 	print(banner)
+	global comm
 	parser = argparse.ArgumentParser(description = "\033[92m[#] Reddit Stuff Downloader [#]\033[0m")
 	parser.add_argument("-l", "--subredditList", help="predefined subreddits list", action="store_true")
 	parser.add_argument("-s", "--sub", help="single subreddit; -s <sub name>", dest='subname')
@@ -567,8 +581,10 @@ def main():
 	parser.add_argument("-t", "--type", help="filter type(hot,top,new); -t <type>", dest='typ')	# display all types of sorting filters
 	parser.add_argument("-i", "--pid", help="single Post ID; -i <PostID>", dest='pid')
 	parser.add_argument("-u", "--purl", help="single Post URL; -u <PostUrl>", dest='purl')
+	parser.add_argument("-m", "--comm", help="download comments; -m <limit>", dest='comm')
 	args = parser.parse_args()
-
+	
+	comm = args.comm if(args.comm) else 0
 	if len(sys.argv) == 1:
 		parser.print_help()
 					# add check for count and filter value provided
