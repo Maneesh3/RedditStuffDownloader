@@ -47,6 +47,7 @@ optional arguments:
   -t TYP, --type TYP         filter type(hot,top,new); -t <type>
   -i PID, --pid PID          single Post ID; -i <PostID>
   -u PURL, --purl PURL       single Post URL; -u <PostUrl>
+  -m COMM, --comm COMM       download comments; -m <limit>
  
  
 Each subreddit content is saved in a seperate directory 
