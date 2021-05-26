@@ -308,7 +308,7 @@ def download(post_ID, url, re_url, file_name, title, exten):
 		#print(e)		# for debugging
 		print("cannot able to download")
 		newD = '{"title" : "'+ str(title.encode("utf-8")) +'", "url" :"' + str(url) + '", "re_url" :"' + str(re_url) + '"}'
-		txt_file = open(post_ID+'.txt','a')
+		txt_file = open(post_ID+'.txt','a',encoding="utf-8")
 		txt_file.write(newD)
 		txt_file.close()
 		exten = '.txt'
@@ -331,7 +331,7 @@ def initialDownload(post_ID, url, re_url, file_name, title, exten):
 
 	elif(exten == 'youtube'):
 		print('Youtube Video txt file saved!')
-		txt_file = open(post_ID+'_ytb_.txt','a')
+		txt_file = open(post_ID+'_ytb_.txt','a',encoding="utf-8")
 		txt_file.write(title + '\n\n' + url)
 		txt_file.close()
 	elif(exten != 'POST' and exten != 'youtube'):
@@ -479,7 +479,7 @@ def getSubredditPosts(subredditName,limitPosts,filter_type):
 
 		if(post.selftext != ''):
 			print('POST saved!')
-			txt_file = open(post_ID+'_text_.txt','a')
+			txt_file = open(post_ID+'_text_.txt','a',encoding="utf-8")
 			txt_file.write(post.selftext)
 			txt_file.close()
 		exten,re_url = checkDownloadFormat(url)
