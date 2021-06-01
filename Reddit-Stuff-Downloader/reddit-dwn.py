@@ -477,9 +477,10 @@ def getSubredditPosts(subredditName,limitPosts,filter_type):
 		# if "." not in file_name:
 		# 	file_name += ".jpg"
 
-		if(post.selftext != ''):
+		if(post.is_self):
 			print('POST saved!')
 			txt_file = open(post_ID+'_text_.txt','a',encoding="utf-8")
+			txt_file.write(title+'\n'+10*'='+'\n\n')
 			txt_file.write(post.selftext)
 			txt_file.close()
 		exten,re_url = checkDownloadFormat(url)
@@ -545,9 +546,10 @@ def main_getPost(postID,postURL):
 	title = title.replace("\"","*")
 	title = title.replace("\'","_")
 	print(title)
-	if(post.selftext != ''):
+	if(post.is_self):
 		print('POST saved!')
-		txt_file = open(post_ID+'_text_.txt','a')
+		txt_file = open(post_ID+'_text_.txt','a',encoding="utf-8")
+		txt_file.write(title+'\n'+10*'='+'\n\n')
 		txt_file.write(post.selftext)
 		txt_file.close()
 	exten,re_url = checkDownloadFormat(url)
